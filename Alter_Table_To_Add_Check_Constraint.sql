@@ -1,0 +1,1 @@
+ALTER TABLE tblPerson ADD CONSTRAINT CK_tblPerson_Age CHECK (Age > 0 AND Age < 150)

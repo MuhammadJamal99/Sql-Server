@@ -1,0 +1,7 @@
+USE Sample2;
+GO
+/** ADD UNIQUE CONSTRAINT **/
+ALTER TABLE tblPerson ADD CONSTRAINT UQ_tblPerson_Email UNIQUE(Email);
+
+/** DROP UNIQUE CONSTRAINT **/
+ALTER TABLE tblPerson DROP CONSTRAINT UQ_tblPerson_Email;
