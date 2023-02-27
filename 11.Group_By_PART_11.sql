@@ -26,13 +26,6 @@ VALUES
 ('James', 'Male', 6500, 'London'),
 ('Russell', 'Male', 8800, 'London');
 
-
-/**
-	DELETE FROM [Sample2].[dbo].[tblEmployee];
-	DBCC CHECKIDENT([tblEmployee] , RESEED, 0);
-	DROP TABLE [Sample2].[dbo].[tblEmployee];
-**/
-
 /** SELECT SUM OF SALARY FROM TABLE EMPLOYEE **/
 SELECT SUM([Salary]) FROM [Sample2].[dbo].[tblEmployee];
 
@@ -80,3 +73,10 @@ FROM [Sample2].[dbo].[tblEmployee]
 GROUP BY [City], [Gender]
 HAVING [Gender] = 'Male'
 ORDER BY [City];
+
+/** DARFT **/
+/**
+	DELETE FROM [Sample2].[dbo].[tblEmployee];
+	DBCC CHECKIDENT([tblEmployee] , RESEED, 0);
+	DROP TABLE [Sample2].[dbo].[tblEmployee];
+**/
