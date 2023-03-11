@@ -1,57 +1,63 @@
-/** 27.DatePart_DateAdd_and_DateDiff_Functions **/
-/** DateTime Functions **/
+/** 27.Cast_and_Convert_Functions **/
+/**
+	CAST is based on ANSI Standard and convert os specific to sql server. 
+	so, if portability is a concern and if you want to use the script with 
+	other database applications use Cast().
+**/
+/**
+	Convert provides more flexibility than Cast. 
+	For example, it's possible to control how you want DateTime datatypes to be converted using 
+	styles with convert functions.
+**/
+/**
+	Note: The general guideline is to use CAST(), 
+	unless you want to take advantage of the style functionality in CONVERT().
+**/
 
-/** 1.DatePart(DatePart,Date) **/
+
+/** 1.CAST(expression AS data_Type [(length)]) **/
+/** It Takes Expression Parameter and As DataType And Length Is Optional **/
+
+SELECT [ID], [FirstName],[DOB], CAST([DOB] AS NVARCHAR) AS [ConvertedDOB]
+FROM [Sample2].[dbo].[tblEmployee];
+
+SELECT [ID], [FirstName], [DOB], CAST([DOB] AS NVARCHAR(50)) AS [ConvertedDOB]
+FROM [Sample2].[dbo].[tblEmployee];
+
+/** 2.CONVERT(data_Type [(length)], expression[Style]) **/
+/** Style Used only with Convert Function **/
 /** 
-	DATEPART(DatePart,Date) 
-		Returns an integer representing the specified DatePart. 
-		This function is Simialar to DATENAME().
-		DATENAME()  Returns NVARCHAR 
-		DATEPART() Returns an integer
+	To Control formating of the date part,
+	DateTime has to be Converted to Nvarchar using The Styles Provided.
+	When Converting to Date Data type, 
+	The Convert() function Will Ignore the style Parameter. 
 **/
-SELECT DATEPART(WEEKDAY,'2012-08-30 19:45:31.793') AS [Date Part]; --return 5
-SELECT DATENAME(WEEKDAY,'2012-08-30 19:45:31.793') AS [Date NAME]; --return 5
-
-/** 2.DateAdd(DatePart, NumberToAdd, Date) **/
-/**
-	DATEADD(DatePart, NumberToAdd, Date)
-		Returns The DateTime, After Adding Specified NumberToAdd, 
-		to The DatePart Specified of the Given Date.
+/** 
+	Style		DateFormat
+	101			MM/dd/yyyy
+	102			yy.MM.dd
+	103			dd/MM/yyyy
+	104			dd.MM.yy
+	105			dd-mm-yy		
 **/
-SELECT DATEADD(DAY,20,'2012-08-30 19:45:31.793'); --Returns '2012-09-19 19:45:31.793' 
-SELECT DATEADD(MONTH,2,'2012-08-30 19:45:31.793'); --Returns '2012-10-30 19:45:31.793' 
-SELECT DATEADD(YEAR,11,'2012-08-30 19:45:31.793'); --Returns '2023-8-30 19:45:31.793' 
+SELECT [ID], [FirstName], [DOB], CONVERT(NVARCHAR, [DOB]) AS [ConvertedDOB]
+FROM [Sample2].[dbo].[tblEmployee];
 
-/** 3.DateDiff(DatePart,StartDate,EndDate) **/
-/**
-	DATEDIFF(DatePart, StartDate, EndDate) 
-		Returns the Count of the Specified DatePart Boundaries Crossed 
-		between The Specified StartDate and EndDate
-**/
-ALTER TABLE [dbo].[tblEmployee]
-ALTER COLUMN [DOB] DATETIME;
+SELECT [ID], [FirstName], [DOB], CONVERT(NVARCHAR, [DOB], 101) AS [ConvertedDOB-101]
+FROM [Sample2].[dbo].[tblEmployee];
 
-CREATE FUNCTION [dbo].fnGetAgeFromDOB(@Dob DATETIME)
-RETURNS NVARCHAR(50)
-AS
-BEGIN
-	DECLARE @Tempdate DATETIME, @Years INT, @Months INT, @Days INT, @Age NVARCHAR(50);
-	SET @Tempdate = @Dob;
-	SELECT @Years = DATEDIFF(YEAR, @Tempdate, GETDATE()) -
-	CASE
-		WHEN(MONTH(@Dob) > MONTH(GETDATE())) OR (MONTH(@Dob) = MONTH(GETDATE()) AND DAY(@Dob) > DAY(GETDATE()))
-		THEN 1 ELSE 0
-	END
-	SELECT @Tempdate = DATEADD(YEAR, @Years, @Tempdate);
-	SELECT @Months = DATEDIFF(MONTH, @Tempdate, GETDATE()) -
-	CASE
-		WHEN DAY(@Dob) > DAY(GETDATE())
-		THEN 1 ELSE 0
-	END
-	SELECT @TempDate = DATEADD(MONTH, @Months, @TempDate)
-	SELECT @Days = DATEDIFF(DAY, @Tempdate, GETDATE())
-	SET @Age = CAST(@Years AS NVARCHAR(4)) +' ' + 'Years ' + CAST(@Months AS NVARCHAR(2)) + 'Months ' + CAST(@Days AS NVARCHAR(2)) + 'Days Old';
-	return @Age;
-END
+SELECT [ID], [FirstName], [DOB], CONVERT(NVARCHAR, [DOB], 102) AS [ConvertedDOB-102]
+FROM [Sample2].[dbo].[tblEmployee];
 
-SELECT [ID], [FirstName],[dbo].fnGetAgeFromDOB([DOB]) AS Age FROM [Sample2].[dbo].[tblEmployee];
+SELECT [ID], [FirstName], [DOB], CONVERT(NVARCHAR, [DOB], 103) AS [ConvertedDOB-103]
+FROM [Sample2].[dbo].[tblEmployee];
+
+SELECT [ID], [FirstName], [DOB], CONVERT(NVARCHAR, [DOB], 104) AS [ConvertedDOB-104]
+FROM [Sample2].[dbo].[tblEmployee];
+
+SELECT [ID], [FirstName], [DOB], CONVERT(NVARCHAR, [DOB], 105) AS [ConvertedDOB-105]
+FROM [Sample2].[dbo].[tblEmployee];
+
+SELECT [ID], [FirstName], [FirstName] +'-'+CAST([ID] AS NVARCHAR) AS [Name-ID]
+FROM [Sample2].[dbo].[tblEmployee];
+
