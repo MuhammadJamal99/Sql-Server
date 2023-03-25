@@ -1,0 +1,3 @@
+SELECT DISTINCT [CITY]
+FROM [Hackerrank].[Easy].[STATION]
+WHERE [CITY] LIKE '%[AEIOU]';
